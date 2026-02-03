@@ -5,13 +5,11 @@
   <title>DARCO Bike Shop</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- LINK TO CSS FILE -->
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header>
+<header class="fade-in">
   <h1>DARCO BIKE SHOP</h1>
   <p class="tagline">Ride Safe • Ride Strong • Ride with DARCO 🚴</p>
 </header>
@@ -24,79 +22,68 @@
   <a href="#contact">Contact</a>
 </nav>
 
-<section id="home">
+<section id="home" class="reveal">
   <h2>Mission</h2>
   <p>
     To provide high-quality bicycles, genuine Shimano parts, and
-    reliable bike services while promoting safety, performance,
-    and passion for cycling.
+    reliable bike services while promoting safety and performance.
   </p>
 
   <h2>Vision</h2>
   <p>
-    To become a trusted bike shop that inspires riders of all levels
-    to enjoy cycling and live a healthy, active lifestyle.
+    To become a trusted bike shop that inspires riders to live an
+    active and healthy cycling lifestyle.
   </p>
 
   <h2>Welcome to DARCO Bike Shop</h2>
-  <p>
-    Your one-stop bike shop for premium bike parts, mountain bikes,
-    road bikes, and professional bike services.
-  </p>
+  <p>Your one-stop shop for bikes, parts, and upgrades.</p>
 </section>
 
-<section id="parts">
+<section id="parts" class="reveal">
   <h2>Bike Parts (Shimano)</h2>
   <div class="grid">
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250" alt="Shimano Deore">
+      <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07b" alt="Shimano Deore">
       <h3>Shimano DEORE</h3>
       <p class="price">₱8,500</p>
-      <button onclick="addToCart('Shimano DEORE',8500)">Add to Cart</button>
+      <button onclick="addToCart('Shimano DEORE',8500,this)">Add to Cart</button>
     </div>
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250" alt="Shimano Alivio">
-      <h3>Shimano ALIVIO</h3>
-      <p class="price">₱6,500</p>
-      <button onclick="addToCart('Shimano ALIVIO',6500)">Add to Cart</button>
-    </div>
-
-    <div class="card">
-      <img src="https://via.placeholder.com/400x250" alt="Shimano XT">
+      <img src="https://images.unsplash.com/photo-1617814076367-b759c7e9c88c" alt="Shimano XT">
       <h3>Shimano XT</h3>
       <p class="price">₱18,000</p>
-      <button onclick="addToCart('Shimano XT',18000)">Add to Cart</button>
+      <button onclick="addToCart('Shimano XT',18000,this)">Add to Cart</button>
     </div>
 
   </div>
 </section>
 
-<section id="bikes">
+<section id="bikes" class="reveal">
   <h2>Bikes</h2>
   <div class="grid">
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250" alt="Mountain Peak">
-      <h3>Mountain Peak MTB</h3>
+      <!-- Pinterest image link you provided -->
+      <img src="https://pin.it/6okuRba58" alt="Mountain Bike">
+      <h3>Mountain Bike</h3>
       <p class="price">₱15,500</p>
-      <button onclick="addToCart('Mountain Peak MTB',15500)">Add to Cart</button>
+      <button onclick="addToCart('Mountain Bike',15500,this)">Add to Cart</button>
     </div>
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250" alt="Sagmit MTB">
-      <h3>Sagmit MTB</h3>
-      <p class="price">₱12,800</p>
-      <button onclick="addToCart('Sagmit MTB',12800)">Add to Cart</button>
+      <img src="https://images.unsplash.com/photo-1508780709619-79562169bc64" alt="Road Bike">
+      <h3>Road Bike</h3>
+      <p class="price">₱22,000</p>
+      <button onclick="addToCart('Road Bike',22000,this)">Add to Cart</button>
     </div>
 
   </div>
 </section>
 
-<section id="cart">
+<section id="cart" class="reveal">
   <h2>Your Cart</h2>
-
   <div class="cart" id="cartItems">
     <p>No items yet.</p>
   </div>
@@ -111,7 +98,7 @@
   </div>
 </section>
 
-<section id="contact">
+<section id="contact" class="reveal">
   <h2>Contact Us</h2>
   <p><strong>📧 Gmail:</strong> darcogmailmcom</p>
   <p><strong>📞 Contact:</strong> 09473542181</p>
@@ -122,41 +109,6 @@
   <p>© 2026 DARCO Bike Shop</p>
 </footer>
 
-<script>
-let cart = [];
-
-function addToCart(item, price){
-  cart.push({item, price});
-  displayCart();
-}
-
-function displayCart(){
-  let cartDiv = document.getElementById("cartItems");
-  cartDiv.innerHTML = "";
-  cart.forEach((c, i) => {
-    cartDiv.innerHTML += `<p>${i + 1}. ${c.item} - ₱${c.price}</p>`;
-  });
-}
-
-function checkout(){
-  if(cart.length === 0){
-    alert("Cart is empty!");
-    return;
-  }
-
-  let total = 0;
-  let receiptItems = document.getElementById("receiptItems");
-  receiptItems.innerHTML = "";
-
-  cart.forEach(c => {
-    total += c.price;
-    receiptItems.innerHTML += `<p>${c.item} - ₱${c.price}</p>`;
-  });
-
-  document.getElementById("totalAmount").innerText = "TOTAL: ₱" + total;
-  document.getElementById("receipt").style.display = "block";
-}
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
