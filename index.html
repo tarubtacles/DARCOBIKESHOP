@@ -1,112 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>DARCO Bike Shop</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>DARCO Bike Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-  margin:0;
-  font-family: Arial, Helvetica, sans-serif;
-  background:#eef4fb;
-  font-size:18px;
-}
-header{
-  background:linear-gradient(135deg,#003b8e,#005fd1);
-  color:#fff;
-  padding:40px 20px;
-  text-align:center;
-}
-header h1{
-  font-size:42px;
-}
-nav{
-  background:#002b66;
-  padding:15px;
-  text-align:center;
-}
-nav a{
-  color:#fff;
-  margin:0 15px;
-  text-decoration:none;
-  font-weight:bold;
-  font-size:20px;
-}
-section{
-  background:#fff;
-  margin:25px;
-  padding:40px;
-  border-radius:12px;
-}
-h2{
-  color:#002b66;
-  font-size:34px;
-}
-h3{
-  font-size:26px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:25px;
-}
-.card{
-  border:2px solid #cfe0ff;
-  border-radius:12px;
-  padding:15px;
-  text-align:center;
-  background:#f7fbff;
-}
-.card img{
-  width:100%;
-  height:170px;
-  object-fit:cover;
-  border-radius:10px;
-}
-.price{
-  color:#006400;
-  font-size:22px;
-  font-weight:bold;
-}
-button{
-  background:#005fd1;
-  color:#fff;
-  border:none;
-  padding:12px 18px;
-  font-size:18px;
-  border-radius:6px;
-  cursor:pointer;
-}
-button:hover{
-  background:#003b8e;
-}
-.cart{
-  background:#f0f6ff;
-  padding:25px;
-  border-radius:12px;
-}
-.receipt{
-  display:none;
-  background:#fff;
-  border:2px dashed #003b8e;
-  padding:25px;
-  margin-top:20px;
-}
-footer{
-  background:#002b66;
-  color:#fff;
-  text-align:center;
-  padding:25px;
-}
-</style>
+  <!-- LINK TO CSS FILE -->
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
   <h1>DARCO BIKE SHOP</h1>
-  <p style="font-size:22px;">Ride Safe • Ride Strong • Ride with DARCO 🚴</p>
+  <p class="tagline">Ride Safe • Ride Strong • Ride with DARCO 🚴</p>
 </header>
 
 <nav>
@@ -117,7 +24,6 @@ footer{
   <a href="#contact">Contact</a>
 </nav>
 
-<!-- MISSION & VISION SA ITAAS -->
 <section id="home">
   <h2>Mission</h2>
   <p>
@@ -144,21 +50,21 @@ footer{
   <div class="grid">
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250">
+      <img src="https://via.placeholder.com/400x250" alt="Shimano Deore">
       <h3>Shimano DEORE</h3>
       <p class="price">₱8,500</p>
       <button onclick="addToCart('Shimano DEORE',8500)">Add to Cart</button>
     </div>
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250">
+      <img src="https://via.placeholder.com/400x250" alt="Shimano Alivio">
       <h3>Shimano ALIVIO</h3>
       <p class="price">₱6,500</p>
       <button onclick="addToCart('Shimano ALIVIO',6500)">Add to Cart</button>
     </div>
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250">
+      <img src="https://via.placeholder.com/400x250" alt="Shimano XT">
       <h3>Shimano XT</h3>
       <p class="price">₱18,000</p>
       <button onclick="addToCart('Shimano XT',18000)">Add to Cart</button>
@@ -172,14 +78,14 @@ footer{
   <div class="grid">
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250">
+      <img src="https://via.placeholder.com/400x250" alt="Mountain Peak">
       <h3>Mountain Peak MTB</h3>
       <p class="price">₱15,500</p>
       <button onclick="addToCart('Mountain Peak MTB',15500)">Add to Cart</button>
     </div>
 
     <div class="card">
-      <img src="https://via.placeholder.com/400x250">
+      <img src="https://via.placeholder.com/400x250" alt="Sagmit MTB">
       <h3>Sagmit MTB</h3>
       <p class="price">₱12,800</p>
       <button onclick="addToCart('Sagmit MTB',12800)">Add to Cart</button>
@@ -190,11 +96,12 @@ footer{
 
 <section id="cart">
   <h2>Your Cart</h2>
+
   <div class="cart" id="cartItems">
     <p>No items yet.</p>
   </div>
-  <br>
-  <button onclick="checkout()">Checkout</button>
+
+  <button class="checkout-btn" onclick="checkout()">Checkout</button>
 
   <div class="receipt" id="receipt">
     <h3>DARCO BIKE SHOP RECEIPT</h3>
@@ -227,7 +134,7 @@ function displayCart(){
   let cartDiv = document.getElementById("cartItems");
   cartDiv.innerHTML = "";
   cart.forEach((c, i) => {
-    cartDiv.innerHTML += `<p>${i+1}. ${c.item} - ₱${c.price}</p>`;
+    cartDiv.innerHTML += `<p>${i + 1}. ${c.item} - ₱${c.price}</p>`;
   });
 }
 
@@ -236,17 +143,20 @@ function checkout(){
     alert("Cart is empty!");
     return;
   }
+
   let total = 0;
   let receiptItems = document.getElementById("receiptItems");
   receiptItems.innerHTML = "";
-  cart.forEach(c=>{
+
+  cart.forEach(c => {
     total += c.price;
     receiptItems.innerHTML += `<p>${c.item} - ₱${c.price}</p>`;
   });
+
   document.getElementById("totalAmount").innerText = "TOTAL: ₱" + total;
   document.getElementById("receipt").style.display = "block";
 }
 </script>
 
 </body>
-        </html>
+</html>
