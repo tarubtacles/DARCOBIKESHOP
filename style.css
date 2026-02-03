@@ -12,10 +12,6 @@ header{
   text-align:center;
 }
 
-header h1{
-  font-size:42px;
-}
-
 .tagline{
   font-size:22px;
 }
@@ -46,10 +42,6 @@ h2{
   font-size:34px;
 }
 
-h3{
-  font-size:26px;
-}
-
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -62,6 +54,11 @@ h3{
   padding:15px;
   text-align:center;
   background:#f7fbff;
+  transition:transform 0.3s;
+}
+
+.card:hover{
+  transform:translateY(-8px);
 }
 
 .card img{
@@ -87,8 +84,8 @@ button{
   cursor:pointer;
 }
 
-button:hover{
-  background:#003b8e;
+button.added{
+  background:green;
 }
 
 .cart{
@@ -97,16 +94,33 @@ button:hover{
   border-radius:12px;
 }
 
-.checkout-btn{
-  margin-top:15px;
-}
-
 .receipt{
   display:none;
   background:#fff;
   border:2px dashed #003b8e;
   padding:25px;
   margin-top:20px;
+}
+
+/* ANIMATIONS */
+.fade-in{
+  animation:fadeIn 1.5s ease-in;
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(30px);
+  transition:1s;
+}
+
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
 }
 
 footer{
