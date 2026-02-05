@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HAMD Coffee</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+body{background:#f5f1ec;color:#3b2f2f;}
+header{background:#4b2e2e;color:#fff;padding:15px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
+nav a{color:white;margin-left:20px;text-decoration:none;font-weight:bold;}
+.hero{text-align:center;padding:60px 20px;background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80');background-size:cover;color:white;animation:fadeIn 1.5s;}
+.section{padding:50px 40px;text-align:center;}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;margin-top:30px;}
+.card{background:white;border-radius:12px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,.1);transition:.3s;animation:slideUp .8s ease;text-align:center;}
+.card:hover{transform:translateY(-10px) scale(1.03);box-shadow:0 10px 20px rgba(0,0,0,.2);}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:10px;}
+.price{font-weight:bold;margin:10px 0;}
+select{padding:5px;margin:5px;width:100%;}
+.qty-container{display:flex;justify-content:center;align-items:center;margin:5px 0;}
+.qty-container button{padding:5px 10px;margin:0 5px;background:#4b2e2e;color:white;border:none;border-radius:6px;cursor:pointer;transition:.3s;}
+.qty-container button:hover{background:#6b3f3f;}
+.qty-container input{width:50px;text-align:center;padding:5px;}
+button.addBtn{background:#4b2e2e;color:white;border:none;padding:8px 15px;border-radius:6px;cursor:pointer;transition:.3s;margin-top:5px;}
+button.addBtn:hover{background:#6b3f3f;}
+.cart{background:white;padding:20px;margin-top:20px;border-radius:10px;max-width:400px;margin:auto;text-align:left;animation:fadeIn 1s;}
+.dashboard{margin-top:30px;display:flex;justify-content:center;gap:30px;flex-wrap:wrap;}
+.box{background:#4b2e2e;color:white;padding:20px 30px;border-radius:12px;min-width:200px;font-size:18px;animation:pulse 2s infinite;}
+footer{background:#4b2e2e;color:white;text-align:center;padding:15px;margin-top:40px;}
+@keyframes fadeIn{from{opacity:0} to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+.spinner{border:4px solid #f3f3f3;border-top:4px solid #4b2e2e;border-radius:50%;width:30px;height:30px;animation:spin 1s linear infinite;margin:10px auto;}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+/* MODAL */
+.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,0.5);animation:fadeIn 0.5s;}
+.modal-content{background:#fff;margin:10% auto;padding:20px;border-radius:12px;width:80%;max-width:500px;animation:slideUp 0.5s;}
+.close{color:#aaa;float:right;font-size:28px;font-weight:bold;cursor:pointer;}
+.close:hover{color:black;}
+.modal h2{text-align:center;margin-bottom:20px;}
+.modal ul{margin-bottom:15px;}
+.modal p{text-align:right;font-weight:bold;font-size:18px;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>HAMD Coffee</h1>
+<nav>
+<a href="#home">Home</a>
+<a href="#shop">Shop</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+
+<section id="home" class="hero">
+<h2>Fresh Coffee. Warm Moments.</h2>
+<p>Crafted with passion, brewed to perfection.</p>
+</section>
+
+<section id="shop" class="section">
+<h2>Order Now</h2>
+<div class="products" id="productList"></div>
+
+<div class="cart">
+<h3>Cart</h3>
+<ul id="cartItems"></ul>
+<p>Total: ₱<span id="total">0</span></p>
+<button onclick="openModal()">View Bill</button>
+</div>
+
+<div class="dashboard">
+<div class="box">☕ Items Sold<br><span id="sales">0</span></div>
+<div class="box">💰 Total Revenue<br>₱<span id="revenue">0</span></div>
+</div>
+</section>
+
+<section id="contact" class="section">
+<div style="background:#4b2e2e;color:white;padding:15px;border-radius:10px;margin-bottom:20px;">
+<h2>Contact Us</h2>
+<p>Email: hamdcoffee@gmail.com | Phone: 0947-354-2181</p>
+<p>Facebook: facebook.com/hamdcoffee | Location: Brgy. San Juan, Batangas City</p>
+</div>
+</section>
+
+<footer>
+<p>© 2026 HAMD Coffee</p>
+</footer>
+
+<!-- MODAL -->
+<div id="billModal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<h2>Your Receipt</h2>
+<ul id="modalItems"></ul>
+<p>Total: ₱<span id="modalTotal">0</span></p>
+</div>
+</div>
+
+<script>
+// Products
+const products=[
+{name:"Espresso",base:100,img:"https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=400&q=80",sizes:[0,20,40]},
+{name:"Latte",base:149,img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80",sizes:[0,20,40]},
+{name:"Cappuccino",base:139,img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80",sizes:[0,20,40]},
+{name:"Mocha",base:159,img:"https://images.unsplash.com/photo-1512568400610-62da28bc8a13?auto=format&fit=crop&w=400&q=80",sizes:[0,20,40]},
+{name:"Americano",base:129,img:"https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80",sizes:[0,20,40]},
+{name:"Strawberry Shortcake",base:120,img:"https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?auto=format&fit=crop&w=400&q=80",sizes:[0,20,40]},
+{name:"Banana Muffin",base:80,img:"https://images.unsplash.com/photo-1608198093002-de8b0f9d8b5b?auto=format&fit=crop&w=400&q=80",sizes:[0,10,20]},
+{name:"Croissant",base:90,img:"https://images.unsplash.com/photo-1589308078059-f2551a9e0aaf?auto=format&fit=crop&w=400&q=80",sizes:[0,10,20]},
+{name:"Blueberry Cheesecake",base:150,img:"https://images.unsplash.com/photo-1601972599720-b0c8d2c3b9e4?auto=format&fit=crop&w=400&q=80",sizes:[0,20,40]},
+{name:"Chocolate Fudge Cake",base:180,img:"https://images.unsplash.com/photo-1617196031710-1a4a4f8b7a45?auto=format&fit=crop&w=400&q=80",sizes:[0,30,50]},
+{name:"Red Velvet Cake",base:200,img:"https://images.unsplash.com/photo-1599785209793-9c318d92dbf1?auto=format&fit=crop&w=400&q=80",sizes:[0,30,50]},
+{name:"Matcha Green Tea Cake",base:190,img:"https://images.unsplash.com/photo-1622445938336-5a1c9e2e8d2a?auto=format&fit=crop&w=400&q=80",sizes:[0,30,50]}
+];
+
+let cart=[];
+let total=0;
+let sales=0;
+
+// Render products
+const productList=document.getElementById('productList');
+products.forEach((p,i)=>{
+  const card=document.createElement('div');
+  card.className='card';
+  card.innerHTML=`
+    ${i>=5?'<div class="spinner"></div>':''}
+    <img src="${p.img}">
+    <h3>${p.name}</h3>
+    <p class="price">Base: ₱${p.base}</p>
+    <select id="size${i}">
+      ${p.sizes.map((s,j)=>`<option value="${s}">${j===0?'Small':j===1?'Medium (+₱'+s+')':'Large (+₱'+s+')'}</option>`).join('')}
+    </select>
+    <div class="qty-container">
+      <button onclick="changeQty('qty${i}',-1)">-</button>
+      <input type="number" id="qty${i}" value="1" min="1">
+      <button onclick="changeQty('qty${i}',1)">+</button>
+    </div>
+    <button class="addBtn" onclick="addToCart(${i})">Add</button>
+  `;
+  productList.appendChild(card);
+});
+
+// Quantity +/-
+function changeQty(id,delta){
+  const input=document.getElementById(id);
+  let val=parseInt(input.value)+delta;
+  if(val<1) val=1;
+  input.value=val;
+}
+
+// Add to cart
+function addToCart(index){
+  const p=products[index];
+  const qty=parseInt(document.getElementById('qty'+index).value);
+  const sizePrice=parseInt(document.getElementById('size'+index).value);
+  const price=(p.base+sizePrice)*qty;
+
+  const existing=cart.find(c=>c.name===p.name && c.size===sizePrice);
+  if(existing){existing.qty+=qty; existing.total+=price;}
+  else{cart.push({name:p.name,qty,total:price,size:sizePrice});}
+
+  updateCart();
+}
+
+// Update cart display
+function updateCart(){
+  const ul=document.getElementById('cartItems');
+  ul.innerHTML='';
+  total=0; sales=0;
+  cart.forEach(item=>{
+    const li=document.createElement('li');
+    li.innerText=`${item.name} x${item.qty} = ₱${item.total}`;
+    ul.appendChild(li);
+    total+=item.total;
+    sales+=item.qty;
+  });
+  document.getElementById('total').innerText=total;
+  document.getElementById('sales').innerText=sales;
+  document.getElementById('revenue').innerText=total;
+}
+
+// Modal
+const modal=document.getElementById('billModal');
+function openModal(){
+  const modalUl=document.getElementById('modalItems');
+  modalUl.innerHTML='';
+  cart.forEach(i=>{
+    const li=document.createElement('li');
+    li.innerText=`${i.name} x${i.qty} = ₱${i.total}`;
+    modalUl.appendChild(li);
+  });
+  document.getElementById('modalTotal').innerText=total;
+  modal.style.display='block';
+}
+function closeModal(){modal.style.display='none';}
+window.onclick=function(e){if(e.target==modal) closeModal();}
+</script>
+
+</body>
+</html>
